@@ -1,0 +1,18 @@
+{
+  "apps": [
+    {
+      "name": "thevaiya-paiya-backend",
+      "type": "nodejs",
+      "root": "backend",
+      "dockerfile": "./Dockerfile",
+      "port": 3001,
+      "startCommand": "npm start",
+      "buildCommand": "npm install",
+      "healthCheck": "/health",
+      "env": {
+        "NODE_ENV": "production",
+        "PORT": "3001"
+      }
+    }
+  ]
+}

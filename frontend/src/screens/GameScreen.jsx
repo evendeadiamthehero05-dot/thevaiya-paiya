@@ -13,6 +13,8 @@ function GameScreen({
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [accusationReason, setAccusationReason] = useState('');
   const [timerKey, setTimerKey] = useState(0);
+  const [roleUpdated, setRoleUpdated] = useState(false);
+  const [lastRole, setLastRole] = useState(currentPlayer?.role);
 
   // Check if game has ended
   useEffect(() => {
@@ -20,6 +22,17 @@ function GameScreen({
       onGameEnd();
     }
   }, [roomData?.status, onGameEnd]);
+
+  // Detect role change and trigger animation
+  useEffect(() => {
+    if (currentPlayer?.role && currentPlayer.role !== lastRole) {
+      setRoleUpdated(true);
+      setLastRole(currentPlayer.role);
+      // Clear animation after 1 second
+      const timer = setTimeout(() => setRoleUpdated(false), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [currentPlayer?.role, lastRole]);
 
   // Reset timer when seeker changes
   useEffect(() => {
@@ -35,11 +48,37 @@ function GameScreen({
   };
 
   const handleTimerExpire = () => {
-    // Timer expiry is handled by backend
+    // Auto-submit accusation when timer expires
     if (selectedPlayer && accusationReason.trim()) {
       handleAccusation();
+    } else {
+      // Force submit with whatever is available
+      setAccusationReason('(Auto-submitted - Time expired)');
+      if (selectedPlayer) {
+        handleAccusation();
+      }
     }
   };
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyPress = (e) => {
+      // Enter key submits accusation
+      if (e.key === 'Enter' && isSeeker && selectedPlayer && accusationReason.trim()) {
+        e.preventDefault();
+        handleAccusation();
+      }
+      // Escape cancels selection
+      if (e.key === 'Escape' && isSeeker) {
+        e.preventDefault();
+        setSelectedPlayer(null);
+        setAccusationReason('');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [isSeeker, selectedPlayer, accusationReason]);
 
   // Get next role to find
   const ROLES = ['Girlfriend', 'Fling', 'Side Chick', 'Ex', "Ex's Ex", 'Lover'];
@@ -76,7 +115,7 @@ function GameScreen({
               </p>
             )}
             {currentPlayer && (
-              <div className="your-role-display">
+              <div className={`your-role-display ${roleUpdated ? 'updated' : ''}`}>
                 <p className="role-label">Your Role:</p>
                 <p className="role-value">{currentPlayer.role}</p>
               </div>

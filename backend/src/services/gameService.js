@@ -5,11 +5,21 @@ const ROLE_POINTS = {
   'Girlfriend': 10,
   'Fling': 8,
   'Side Chick': 6,
-  'Ex': 4,
-  "Ex's Ex": 2,
-  'Lover': 0,
-};
+  /**
+   * Process an accusation with comprehensive validation
+   */
+  async function processAccusation(db, roomId, seekerId, accusedPlayerId, reason) {
+    return new Promise((resolve, reject) => {
+      // Input validation
+      if (!roomId || !seekerId || !accusedPlayerId || !reason) {
+        reject(new Error('Missing required fields'));
+        return;
+      }
 
+      if (seekerId === accusedPlayerId) {
+        reject(new Error('Cannot accuse yourself'));
+        return;
+      }
 const TIMER_DURATION = 30; // 30 seconds per turn
 
 /**
@@ -19,6 +29,11 @@ async function createRoom(db, hostName) {
   const roomId = Math.random().toString(36).substring(2, 8).toUpperCase();
   const hostId = uuidv4();
 
+
+          if (room.status !== 'playing') {
+            reject(new Error('Game is not in progress'));
+            return;
+          }
   return new Promise((resolve, reject) => {
     // Create room
     db.run(
@@ -28,7 +43,7 @@ async function createRoom(db, hostName) {
         if (err) {
           reject(new Error(`Failed to create room: ${err.message}`));
           return;
-        }
+            reject(new Error('That player was just accused. Try someone else'));
 
         // Add host player
         db.run(

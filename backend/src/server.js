@@ -51,6 +51,9 @@ const io = socketIo(server, {
   cors: corsOptions,
 });
 
+// Store socket to room/player mapping
+const socketToRoom = new Map();
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -106,6 +109,10 @@ io.on('connection', (socket) => {
   socket.on('JOIN_GAME_ROOM', async (data) => {
     const { roomId, playerId } = data;
     socket.join(roomId);
+    
+    // Store socket-to-room mapping
+    socketToRoom.set(socket.id, { roomId, playerId });
+    
     console.log(`Player ${playerId} joined room ${roomId}`);
 
     // Fetch and emit current room state
@@ -166,8 +173,49 @@ io.on('connection', (socket) => {
   });
 
   // Disconnect
-  socket.on('disconnect', () => {
+  socket.on('disconnect', async () => {
     console.log(`Player disconnected: ${socket.id}`);
+    
+    // Get room and player info
+    const socketInfo = socketToRoom.get(socket.id);
+    
+    if (socketInfo) {
+      const { roomId, playerId } = socketInfo;
+      
+      try {
+        // Check if room exists and game is active
+        const room = await gameService.getRoomData(db, roomId);
+        
+        if (room && (room.status === 'playing' || room.status === 'waiting')) {
+          console.log(`🚨 Player ${playerId} disconnected from active game in room ${roomId}`);
+          
+          // End the game for everyone
+          await new Promise((resolve) => {
+            db.run(
+              'UPDATE rooms SET status = ? WHERE room_id = ?',
+              ['aborted', roomId],
+              (err) => {
+                if (!err) {
+                  console.log(`Game aborted in room ${roomId}`);
+                }
+                resolve();
+              }
+            );
+          });
+          
+          // Notify all players in room that game was aborted
+          io.to(roomId).emit('GAME_ABORTED', {
+            reason: `${room.players?.find(p => p.uid === playerId)?.name || 'A player'} left the game`,
+            message: 'Game ended because a player disconnected',
+          });
+        }
+      } catch (error) {
+        console.error('Error handling disconnect:', error);
+      }
+      
+      // Clean up socket mapping
+      socketToRoom.delete(socket.id);
+    }
   });
 });
 

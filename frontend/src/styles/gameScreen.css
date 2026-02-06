@@ -9,6 +9,25 @@
   overflow-y: auto;
 }
 
+/* Keyframe animations */
+@keyframes roleUpdate {
+  0% {
+    background: rgba(255, 200, 0, 0.2);
+    border-color: #ffc800;
+    transform: scale(1);
+  }
+  50% {
+    background: rgba(255, 100, 100, 0.4);
+    border-color: #ff6464;
+    transform: scale(1.05);
+  }
+  100% {
+    background: rgba(255, 200, 0, 0.2);
+    border-color: #ffc800;
+    transform: scale(1);
+  }
+}
+
 /* Scrollbar styling */
 .game-screen::-webkit-scrollbar {
   width: 6px;
@@ -78,6 +97,10 @@
   font-weight: 700;
   color: #ffd700;
   margin: 0;
+}
+
+.your-role-display.updated {
+  animation: roleUpdate 1s ease-in-out;
 }
 
 .revealed-roles {

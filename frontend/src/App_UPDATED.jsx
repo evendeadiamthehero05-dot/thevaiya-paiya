@@ -107,13 +107,6 @@ function App() {
     }
   }, [roomData, playerId]);
 
-  // Auto-transition all players when game status changes to 'playing'
-  useEffect(() => {
-    if (roomData?.status === 'playing' && (screen === 'lobby' || screen === 'home')) {
-      setScreen('roleReveal');
-    }
-  }, [roomData?.status, screen]);
-
   // Auto-transition to ready screen when game starts with 6-8 players
   useEffect(() => {
     if (roomData?.status === 'waiting' && roomData?.players?.length >= 6) {
@@ -123,6 +116,13 @@ function App() {
       }
     }
   }, [roomData?.status, roomData?.players, screen]);
+
+  // Auto-transition all players when game status changes to 'playing'
+  useEffect(() => {
+    if (roomData?.status === 'playing' && (screen === 'lobby' || screen === 'ready')) {
+      setScreen('roleReveal');
+    }
+  }, [roomData?.status, screen]);
 
   // Auto-transition to results when game ends
   useEffect(() => {
@@ -216,10 +216,10 @@ function App() {
     setPlayerReady(false);
     socketRef.current.emit('PLAYER_NOT_READY', { roomId, playerId });
   };
+
   // Handle start game
   const handleStartGame = () => {
     socketRef.current.emit('START_GAME', { roomId });
-    // Wait for backend to process and broadcast to all players before transitioning host
     setTimeout(() => setScreen('roleReveal'), 800);
   };
 

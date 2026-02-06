@@ -1,0 +1,96 @@
+/* Connection Status Indicator */
+
+.connection-status {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  z-index: 1000;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.connection-status.connected {
+  border-color: #00ff00;
+  color: #00ff00;
+}
+
+.connection-status.connected .status-indicator {
+  background: #00ff00;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.connection-status.reconnecting {
+  border-color: #ffc800;
+  color: #ffc800;
+}
+
+.connection-status.reconnecting .status-indicator {
+  background: #ffc800;
+  box-shadow: 0 0 10px rgba(255, 200, 0, 0.5);
+  animation: blink 0.5s ease-in-out infinite;
+}
+
+.connection-status.disconnected {
+  border-color: #ff6464;
+  color: #ff6464;
+}
+
+.connection-status.disconnected .status-indicator {
+  background: #ff6464;
+  box-shadow: 0 0 10px rgba(255, 100, 100, 0.5);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .connection-status {
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
+  }
+}

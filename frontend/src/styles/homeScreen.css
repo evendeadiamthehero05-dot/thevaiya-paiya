@@ -116,3 +116,19 @@
   margin-top: 1.5rem;
   animation: slideInUp 0.6s ease-out 0.4s backwards;
 }
+
+@media (max-width: 768px) {
+  .home-screen {
+    max-width: 100%;
+    padding: 0.75rem;
+    gap: 1rem;
+  }
+
+  .home-screen h1 {
+    font-size: 2rem;
+  }
+
+  .form {
+    padding: 1rem;
+  }
+}

@@ -175,3 +175,19 @@
 .lobby-screen .exit-button {
   animation: slideInUp 0.6s ease-out 0.3s backwards;
 }
+
+@media (max-width: 768px) {
+  .lobby-screen {
+    max-width: 100%;
+    padding: 0.75rem;
+    gap: 1rem;
+  }
+
+  .players-list ul {
+    grid-template-columns: 1fr;
+  }
+
+  .room-info {
+    padding: 1rem;
+  }
+}

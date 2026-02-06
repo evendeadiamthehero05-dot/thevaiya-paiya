@@ -30,6 +30,43 @@ body {
   padding: 1rem;
 }
 
+/* Mobile layout: stretch full-width and avoid vertical centering which feels odd on phones */
+@media (max-width: 768px) {
+  #root {
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 0.75rem;
+  }
+
+  /* Reduce global font-size for very small screens */
+  html {
+    font-size: 14px;
+  }
+
+  /* Make containers full-width and remove overly large radius */
+  .container {
+    max-width: 100%;
+    padding: 1rem;
+    border-radius: 1rem;
+    margin: 0.5rem 0;
+  }
+
+  /* Make buttons full width by default on small screens */
+  button {
+    width: 100%;
+    padding: 0.9rem;
+    border-radius: 0.9rem;
+  }
+}
+
+/* Prefer reduced motion: tone down animations for accessibility and smoother mobile experience */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
 /* Typography */
 
 h1 {

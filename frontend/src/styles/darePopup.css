@@ -68,3 +68,18 @@
 .dare-popup button {
   margin-top: 1rem;
 }
+
+@media (max-width: 480px) {
+  .dare-popup {
+    padding: 1rem;
+    border-radius: 0.75rem;
+  }
+
+  .dare-popup h2 {
+    font-size: 1.25rem;
+  }
+
+  .dare-text {
+    font-size: 1rem;
+  }
+}

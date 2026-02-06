@@ -316,3 +316,14 @@
     font-size: 0.95rem;
   }
 }
+
+/* Additional global mobile helpers */
+@media (max-width: 480px) {
+  .final-results {
+    padding: 0.6rem;
+  }
+
+  .results-actions {
+    flex-direction: column;
+  }
+}

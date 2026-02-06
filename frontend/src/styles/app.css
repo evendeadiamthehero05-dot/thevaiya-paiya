@@ -8,6 +8,13 @@
   justify-content: center;
 }
 
+@media (max-width: 768px) {
+  .app {
+    align-items: flex-start;
+    padding-top: 1rem;
+  }
+}
+
 .error-message {
   background-color: #ff4757;
   color: white;

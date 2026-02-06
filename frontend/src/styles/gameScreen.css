@@ -103,6 +103,25 @@
   animation: roleUpdate 1s ease-in-out;
 }
 
+.conn-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+.conn-dot.online {
+  background: #00ff00;
+  box-shadow: 0 0 8px rgba(0, 255, 0, 0.2);
+}
+
+.conn-dot.offline {
+  background: #ff6464;
+  opacity: 0.75;
+}
+
 .revealed-roles {
   display: flex;
   flex-direction: column;

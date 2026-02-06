@@ -38,6 +38,7 @@ function LobbyScreen({ roomId, roomData, playerId, currentPlayer, onStartGame })
             <ul>
               {roomData.players.map((player) => (
                 <li key={player.uid} className={player.uid === playerId ? 'current-player' : ''}>
+                  <span className={`conn-dot ${player.connected ? 'online' : 'offline'}`} />
                   <span className="player-name">{player.name}</span>
                   {player.isHost && <span className="host-badge">Host</span>}
                 </li>

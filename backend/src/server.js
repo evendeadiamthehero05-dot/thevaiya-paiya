@@ -54,6 +54,29 @@ const io = socketIo(server, {
 // Store socket to room/player mapping
 const socketToRoom = new Map();
 
+// Helper: emit room state with connected flags
+async function emitRoomState(roomId) {
+  try {
+    const room = await gameService.getRoomData(db, roomId);
+
+    // Compute connected players for this room from socketToRoom map
+    const connectedSet = new Set();
+    for (const [, info] of socketToRoom.entries()) {
+      if (info.roomId === roomId && info.playerId) connectedSet.add(info.playerId);
+    }
+
+    // Attach connected flag to players
+    room.players = room.players.map((p) => ({
+      ...p,
+      connected: connectedSet.has(p.uid),
+    }));
+
+    io.to(roomId).emit('ROOM_STATE_UPDATE', room);
+  } catch (err) {
+    console.error('Error emitting room state:', err);
+  }
+}
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -117,8 +140,7 @@ io.on('connection', (socket) => {
 
     // Fetch and emit current room state
     try {
-      const room = await gameService.getRoomData(db, roomId);
-      io.to(roomId).emit('ROOM_STATE_UPDATE', room);
+      await emitRoomState(roomId);
     } catch (error) {
       console.error('Error fetching room state:', error);
     }
@@ -129,8 +151,7 @@ io.on('connection', (socket) => {
     const { roomId } = data;
     try {
       await gameService.startGame(db, roomId);
-      const room = await gameService.getRoomData(db, roomId);
-      io.to(roomId).emit('ROOM_STATE_UPDATE', room);
+      await emitRoomState(roomId);
     } catch (error) {
       console.error('Error starting game:', error);
       socket.emit('ERROR', { message: error.message });
@@ -152,9 +173,8 @@ io.on('connection', (socket) => {
       // Emit result to all players in room
       io.to(roomId).emit('ACCUSATION_RESULT', result);
 
-      // Update room state
-      const room = await gameService.getRoomData(db, roomId);
-      io.to(roomId).emit('ROOM_STATE_UPDATE', room);
+      // Update room state (including connected flags)
+      await emitRoomState(roomId);
     } catch (error) {
       console.error('Error processing accusation:', error);
       socket.emit('ERROR', { message: error.message });
@@ -165,8 +185,7 @@ io.on('connection', (socket) => {
   socket.on('DARE_COMPLETED', async (data) => {
     const { roomId, playerId } = data;
     try {
-      const room = await gameService.getRoomData(db, roomId);
-      io.to(roomId).emit('ROOM_STATE_UPDATE', room);
+      await emitRoomState(roomId);
     } catch (error) {
       console.error('Error after dare completed:', error);
     }

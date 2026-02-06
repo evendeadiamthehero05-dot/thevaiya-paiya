@@ -200,9 +200,15 @@ async function startGame(db, roomId) {
 
             // Shuffle roles
             const playerIds = playersData.map((p) => p.uid);
-            const shuffledRoles = shuffleArray([...ROLES]);
+            // Build a roles list that matches the number of players (6-8).
+            // If there are more players than ROLES length, repeat and reshuffle to fill.
+            let shuffledRoles = [];
+            while (shuffledRoles.length < playerIds.length) {
+              shuffledRoles = shuffledRoles.concat(shuffleArray([...ROLES]));
+            }
+            shuffledRoles = shuffledRoles.slice(0, playerIds.length);
 
-            // Find Girlfriend index
+            // Find first Girlfriend index (must exist since ROLES contains it)
             const girlfriendIndex = shuffledRoles.indexOf('Girlfriend');
             const girlfriendId = playerIds[girlfriendIndex];
 

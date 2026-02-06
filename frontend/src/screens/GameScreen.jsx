@@ -209,6 +209,7 @@ function GameScreen({
               ?.sort((a, b) => b.points - a.points)
               .map((player) => (
                 <div key={player.uid} className="points-item">
+                  <span className={`conn-dot ${player.connected ? 'online' : 'offline'}`} />
                   <span className="player-info-name">{player.name}</span>
                   <span className="points-value">{player.points} pts</span>
                 </div>

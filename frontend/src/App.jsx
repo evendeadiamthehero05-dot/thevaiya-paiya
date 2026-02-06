@@ -63,6 +63,13 @@ function App() {
     }
   }, [roomData, playerId]);
 
+  // Auto-transition all players when game status changes to 'playing'
+  useEffect(() => {
+    if (roomData?.status === 'playing' && (screen === 'lobby' || screen === 'home')) {
+      setScreen('roleReveal');
+    }
+  }, [roomData?.status, screen]);
+
   // Handle create room
   const handleCreateRoom = async (name) => {
     try {
@@ -137,7 +144,8 @@ function App() {
   // Handle start game
   const handleStartGame = () => {
     socketRef.current.emit('START_GAME', { roomId });
-    setTimeout(() => setScreen('roleReveal'), 500);
+    // Wait for backend to process and broadcast to all players before transitioning host
+    setTimeout(() => setScreen('roleReveal'), 800);
   };
 
   // Handle accusation

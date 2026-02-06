@@ -234,7 +234,7 @@ async function startGame(db, roomId) {
                         current_role_index = ?, 
                         timer_ends_at = ? 
                       WHERE room_id = ?`,
-                      ['playing', girlfriendId, 0, timerEndsAt, roomId],
+                      ['playing', girlfriendId, 1, timerEndsAt, roomId],
                       (err) => {
                         if (err) {
                           reject(
@@ -246,7 +246,7 @@ async function startGame(db, roomId) {
                         }
 
                         console.log(
-                          `Game started in room ${roomId}, Girlfriend is ${girlfriendId}`
+                          `Game started in room ${roomId}, Girlfriend is ${girlfriendId}, starting with role_index=1 (Fling)`
                         );
                         resolve();
                       }
@@ -323,7 +323,14 @@ async function processAccusation(db, roomId, seekerId, accusedPlayerId) {
             const normalizedAccused = accusedRole.toLowerCase().trim();
             const isCorrect = normalizedAccused === normalizedExpected;
             
-            console.log(`Comparison result: normalized_expected='${normalizedExpected}', normalized_accused='${normalizedAccused}', isCorrect=${isCorrect}`);
+            console.log(`\n=== ACCUSATION RESULT ===`);
+            console.log(`Room: ${roomId}`);
+            console.log(`Seeker: ${seekerId} → Accusing: ${accusedPlayerId}`);
+            console.log(`Expected: '${expectedRole}' (index ${roleIndex})`);
+            console.log(`Accused role stored: '${accusedRole}'`);
+            console.log(`Normalized - Expected:'${normalizedExpected}' vs Accused:'${normalizedAccused}'`);
+            console.log(`Match: ${isCorrect}`);
+            console.log(`========================\n`);
 
             if (isCorrect) {
               // CORRECT ACCUSATION
@@ -406,6 +413,8 @@ function processCorrectAccusation(
 
               if (nextRoleIndex >= ROLES.length) {
                 // Game ended
+                console.log(`\n✅ GAME ENDED - All roles found!`);
+                console.log(`Final winner: ${accusedPlayerId}`);
                 db.run(
                   'UPDATE rooms SET status = ? WHERE room_id = ?',
                   ['ended', roomId],
@@ -425,6 +434,10 @@ function processCorrectAccusation(
                   }
                 );
               } else {
+                console.log(`\n⭐ CORRECT! Role '${expectedRole}' found by seeker`);
+                console.log(`Next role to find: '${ROLES[nextRoleIndex]}' (index ${nextRoleIndex})`);
+                console.log(`New Seeker: ${accusedPlayerId}\n`);
+                
                 const timerEndsAt = new Date(
                   Date.now() + TIMER_DURATION * 1000
                 ).toISOString();

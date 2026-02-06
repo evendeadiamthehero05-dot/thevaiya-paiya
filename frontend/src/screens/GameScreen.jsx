@@ -141,6 +141,27 @@ function GameScreen({
           </div>
         )}
 
+        {/* Role Progression Tracker */}
+        <div className="role-tracker">
+          <h3>Game Progress</h3>
+          <div className="tracker-roles">
+            {ROLES.map((role, idx) => {
+              const isFound = revealedRoles.some(r => r.role === role);
+              const isCurrent = idx === roomData?.currentRoleIndex;
+              return (
+                <div 
+                  key={role} 
+                  className={`tracker-role ${isFound ? 'found' : ''} ${isCurrent ? 'current' : ''}`}
+                  title={role}
+                >
+                  {isFound ? '✓' : idx === roomData?.currentRoleIndex ? '→' : ''}
+                  <span>{role}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
         {isSeeker && (
           <div className="accusation-panel">
             <h3>Make Your Accusation</h3>
@@ -182,6 +203,20 @@ function GameScreen({
                 Waiting for {currentSeeker?.name} to make an accusation...
               </p>
               <div className="spinner" />
+            </div>
+
+            <div className="player-roster">
+              <h4>Players in Game</h4>
+              <div className="roster-list">
+                {roomData?.players?.map((player) => (
+                  <div key={player.uid} className="roster-item">
+                    <span className="roster-name">{player.name}</span>
+                    {player.uid === roomData.currentSeekerId && (
+                      <span className="seeker-tag">🔍 Seeker</span>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         )}

@@ -155,6 +155,48 @@ app.get('/api/rooms/:roomId', async (req, res) => {
   }
 });
 
+// Debug endpoint to check detailed room state
+app.get('/api/debug/rooms/:roomId', async (req, res) => {
+  try {
+    const { roomId } = req.params;
+    const room = await gameService.getRoomData(db, roomId);
+    
+    // Add debug info
+    const ROLES = ['Girlfriend', 'Fling', 'Side Chick', 'Ex', "Ex's Ex", 'Lover'];
+    const currentRoleIndex = room.currentRoleIndex;
+    const targetRole = currentRoleIndex < ROLES.length ? ROLES[currentRoleIndex] : 'GAME_ENDED';
+    
+    const debugInfo = {
+      roomId: room.roomId,
+      status: room.status,
+      currentRoleIndex,
+      targetRole,
+      currentSeekerId: room.currentSeekerId,
+      currentSeekerName: room.players?.find(p => p.uid === room.currentSeekerId)?.name,
+      playerCount: room.players?.length,
+      players: room.players?.map(p => ({
+        uid: p.uid,
+        name: p.name,
+        role: p.role,
+        points: p.points,
+        hasRevealed: p.hasRevealed,
+        isCurrentSeeker: p.uid === room.currentSeekerId,
+      })),
+      rolesSequence: ROLES,
+    };
+    
+    res.json(debugInfo);
+  } catch (error) {
+    console.error('Error fetching debug info:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', message: 'Server is running' });
+});
+
 // Socket.io connections
 io.on('connection', (socket) => {
   console.log(`Player connected: ${socket.id}`);

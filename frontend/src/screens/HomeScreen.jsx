@@ -46,16 +46,6 @@ function HomeScreen({ onCreateRoom, onJoinRoom }) {
               Join Room
             </button>
           </div>
-
-          <div className="home-info">
-            <h3>How to Play</h3>
-            <ul>
-              <li>6-8 players identify roles in order</li>
-              <li>Wrong guesses trigger dares</li>
-              <li>Roles swap on accusations</li>
-              <li>Find all roles to win!</li>
-            </ul>
-          </div>
         </div>
       </div>
     );

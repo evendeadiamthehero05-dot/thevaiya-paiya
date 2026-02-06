@@ -1,4 +1,6 @@
-/* Global Styles - Mobile-First Design */
+/* Global Styles - Dating App Theme, Mobile-First */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap');
 
 * {
   margin: 0;
@@ -11,13 +13,12 @@ html {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Poppins', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
   min-height: 100vh;
+  color: #e8e8f0;
 }
 
 #root {
@@ -31,20 +32,25 @@ body {
 /* Typography */
 
 h1 {
+  font-family: 'Playfair Display', serif;
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 1rem;
   color: #fff;
+  letter-spacing: -0.5px;
 }
 
 h2 {
+  font-family: 'Playfair Display', serif;
   font-size: 1.75rem;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 0.75rem;
   color: #fff;
+  letter-spacing: -0.3px;
 }
 
 h3 {
+  font-family: 'Poppins', sans-serif;
   font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
@@ -58,88 +64,128 @@ p {
   margin-bottom: 0.75rem;
 }
 
-/* Buttons */
+/* Color Variables */
+:root {
+  --primary: #ff1744;
+  --primary-dark: #d41438;
+  --primary-light: #ff6b9d;
+  --accent: #ff1744;
+  --dark-bg: #0f0f1e;
+  --card-bg: #1a1a2e;
+  --border-color: #ff1744;
+  --text-primary: #fff;
+  --text-secondary: #e8e8f0;
+  --text-muted: #b0b0b8;
+}
 
+/* Buttons */
 button {
-  padding: 0.75rem 1.5rem;
+  padding: 0.875rem 1.75rem;
+  font-family: 'Poppins', sans-serif;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 1.5rem;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(255, 23, 68, 0.2);
 }
 
 button.primary {
-  background-color: #00d4ff;
-  color: #1a1a1a;
+  background: linear-gradient(135deg, #ff1744 0%, #ff6b9d 100%);
+  color: #fff;
+  font-weight: 700;
 }
 
 button.primary:hover {
-  background-color: #00b8d4;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(255, 23, 68, 0.4);
+}
+
+button.primary:active {
   transform: translateY(-2px);
 }
 
 button.primary:disabled {
-  background-color: #ccc;
+  background: #555;
   cursor: not-allowed;
   transform: none;
+  box-shadow: none;
 }
 
 button.secondary {
   background-color: transparent;
-  color: #fff;
-  border: 2px solid #00d4ff;
+  color: #ff1744;
+  border: 2px solid #ff1744;
 }
 
 button.secondary:hover {
-  background-color: #00d4ff;
-  color: #1a1a1a;
+  background-color: #ff1744;
+  color: #fff;
+  transform: translateY(-4px);
 }
 
 button.danger {
-  background-color: #ff4757;
+  background: linear-gradient(135deg, #ff1744 0%, #f50057 100%);
   color: #fff;
 }
 
 button.danger:hover {
-  background-color: #ff3838;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(255, 23, 68, 0.5);
 }
 
 /* Input Fields */
-
 input,
 textarea {
   width: 100%;
-  padding: 0.75rem;
-  border: 2px solid #00d4ff;
-  border-radius: 0.5rem;
+  padding: 1rem;
+  border: 2px solid #2a2a3a;
+  border-radius: 1rem;
   font-size: 1rem;
-  background-color: #2a2a2a;
+  font-family: 'Poppins', sans-serif;
+  background-color: #262635;
   color: #fff;
-  transition: border-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 input:focus,
 textarea:focus {
   outline: none;
-  border-color: #00fff7;
+  border-color: #ff1744;
+  background-color: #2a2a3a;
+  box-shadow: 0 0 15px rgba(255, 23, 68, 0.2);
 }
 
 input::placeholder,
 textarea::placeholder {
-  color: #999;
+  color: #888;
 }
 
 /* Containers */
-
 .container {
   width: 100%;
   max-width: 480px;
-  background: rgba(0, 0, 0, 0.7);
-  border-radius: 1rem;
+  background: rgba(26, 26, 46, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 2rem;
   padding: 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 23, 68, 0.1);
+  border: 1px solid rgba(255, 23, 68, 0.1);
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .grid {
@@ -162,8 +208,7 @@ textarea::placeholder {
   justify-content: space-between;
 }
 
-/* Responsive */
-
+/* Responsive - Mobile First */
 @media (max-width: 768px) {
   html {
     font-size: 14px;
@@ -172,10 +217,16 @@ textarea::placeholder {
   .container {
     max-width: 100%;
     padding: 1.5rem;
+    border-radius: 1.5rem;
   }
 
   h1 {
     font-size: 2rem;
+  }
+
+  button {
+    width: 100%;
+    padding: 1rem;
   }
 
   h2 {

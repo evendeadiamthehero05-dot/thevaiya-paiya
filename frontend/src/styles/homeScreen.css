@@ -1,52 +1,93 @@
-/* Home Screen Styles */
+/* Home Screen Styles - Dating App Theme */
 
 .home-screen {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  animation: fadeIn 0.3s ease-out;
+  gap: 2rem;
+  animation: slideInUp 0.6s ease-out;
+  text-align: center;
 }
 
 .home-screen h1 {
   text-align: center;
-  background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+  background: linear-gradient(135deg, #ff1744 0%, #ff6b9d 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  animation: slideInUp 0.6s ease-out 0.1s backwards;
 }
 
 .home-screen .subtitle {
   text-align: center;
   font-size: 1.1rem;
   font-weight: 500;
-  color: #b0e0ff;
+  color: #ff6b9d;
+  margin-bottom: 1rem;
+  animation: slideInUp 0.6s ease-out 0.2s backwards;
+}
+
+.tagline {
+  font-size: 0.95rem;
+  color: #b0b0b8;\n  font-style: italic;
+  margin-bottom: 1.5rem;
+  animation: slideInUp 0.6s ease-out 0.3s backwards;
 }
 
 .button-group {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  animation: slideInUp 0.6s ease-out 0.4s backwards;
 }
 
 .button-group button {
   width: 100%;
-  padding: 1rem;
-  font-size: 1.1rem;
+  padding: 1.125rem;
+  font-size: 1rem;
+  border-radius: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.25rem;
+  background: linear-gradient(135deg, rgba(255, 23, 68, 0.08) 0%, rgba(255, 107, 157, 0.04) 100%);
+  padding: 2rem;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 23, 68, 0.15);\n  animation: slideInUp 0.6s ease-out 0.3s backwards;
+}
+
+.form-label {
+  text-align: left;
+  font-weight: 600;
+  color: #ff6b9d;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .form input {
   padding: 1rem;
   font-size: 1rem;
+  border-radius: 1rem;
 }
 
 .form button {
   width: 100%;
-  padding: 1rem;
+  padding: 1.125rem;
   font-size: 1rem;
+  border-radius: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.back-button {
+  align-self: flex-start;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.95rem;
+  margin-top: 1.5rem;
+  animation: slideInUp 0.6s ease-out 0.4s backwards;
 }

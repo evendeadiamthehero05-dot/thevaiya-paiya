@@ -1,0 +1,13 @@
+[build]
+command = "npm --workspace=frontend run build"
+publish = "frontend/dist"
+
+# Redirect all URL requests to index.html (for React Router)
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
+
+# Environment variables for production
+[context.production.environment]
+VITE_BACKEND_URL = "https://thevaiya-paiya-backend.onrender.com"

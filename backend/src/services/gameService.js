@@ -19,21 +19,16 @@ async function createRoom(db, hostName) {
   const roomId = Math.random().toString(36).substring(2, 8).toUpperCase();
   const hostId = uuidv4();
 
-
-          if (room.status !== 'playing') {
-            reject(new Error('Game is not in progress'));
-            return;
-          }
   return new Promise((resolve, reject) => {
-    // Create room
+    // Create room record
     db.run(
       'INSERT INTO rooms (room_id, status) VALUES (?, ?)',
       [roomId, 'waiting'],
-      async function(err) {
+      function (err) {
         if (err) {
           reject(new Error(`Failed to create room: ${err.message}`));
           return;
-            reject(new Error('That player was just accused. Try someone else'));
+        }
 
         // Add host player
         db.run(

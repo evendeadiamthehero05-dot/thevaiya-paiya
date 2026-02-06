@@ -1,10 +1,9 @@
 services:
   - type: web
     name: thevaiya-paiya-backend
-    runtime: node
+    runtime: docker
     plan: free
-    buildCommand: cd backend && npm install
-    startCommand: cd backend && npm start
+    dockerfilePath: backend/Dockerfile
     envVars:
       - key: NODE_ENV
         value: production

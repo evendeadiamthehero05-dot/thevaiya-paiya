@@ -75,6 +75,12 @@ function GameScreen({
                 {currentSeeker?.name} is searching...
               </p>
             )}
+            {currentPlayer && (
+              <div className="your-role-display">
+                <p className="role-label">Your Role:</p>
+                <p className="role-value">{currentPlayer.role}</p>
+              </div>
+            )}
           </div>
 
           {isSeeker && (

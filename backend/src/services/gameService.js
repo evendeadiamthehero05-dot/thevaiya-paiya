@@ -467,20 +467,24 @@ function processWrongAccusation(
                     return;
                   }
 
-                  // Update last accused
+                  // Update last accused and change seeker to accused player
+                  const timerEndsAt = new Date(
+                    Date.now() + TIMER_DURATION * 1000
+                  ).toISOString();
+                  
                   db.run(
-                    'UPDATE rooms SET last_accused_player = ? WHERE room_id = ?',
-                    [accusedPlayerId, roomId],
+                    'UPDATE rooms SET last_accused_player = ?, current_seeker_id = ?, timer_ends_at = ? WHERE room_id = ?',
+                    [accusedPlayerId, accusedPlayerId, timerEndsAt, roomId],
                     (err) => {
                       if (err) {
-                        reject(new Error('Failed to update last accused'));
+                        reject(new Error('Failed to update seeker and last accused'));
                         return;
                       }
 
                       resolve({
                         isCorrect: false,
                         dare,
-                        newSeekerId: seekerId,
+                        newSeekerId: accusedPlayerId,
                       });
                     }
                   );

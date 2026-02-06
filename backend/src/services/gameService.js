@@ -200,7 +200,9 @@ async function startGame(db, roomId) {
 
             // Find first Girlfriend index (must exist since ROLES contains it)
             const girlfriendIndex = shuffledRoles.indexOf('Girlfriend');
-            const girlfriendId = playerIds[girlfriendIndex];
+            // Safety: if Girlfriend is not found for any reason, default to first player
+            const gfIndexSafe = girlfriendIndex >= 0 ? girlfriendIndex : 0;
+            const girlfriendId = playerIds[gfIndexSafe];
 
             // Update players with roles
             let updatedCount = 0;
@@ -217,6 +219,13 @@ async function startGame(db, roomId) {
                   updatedCount++;
 
                   if (updatedCount === playerIds.length) {
+                    // Log role assignments for debugging (safe in dev only)
+                    try {
+                      const assignments = playerIds.map((uid, i) => `${uid}=${shuffledRoles[i]}`).join(', ');
+                      console.log(`Role assignments for room ${roomId}: ${assignments}`);
+                    } catch (e) {
+                      // ignore
+                    }
                     // All players updated, now update room
                     const timerEndsAt = new Date(
                       Date.now() + TIMER_DURATION * 1000

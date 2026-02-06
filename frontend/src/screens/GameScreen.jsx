@@ -11,7 +11,6 @@ function GameScreen({
   onGameEnd,
 }) {
   const [selectedPlayer, setSelectedPlayer] = useState(null);
-  const [accusationReason, setAccusationReason] = useState('');
   const [timerKey, setTimerKey] = useState(0);
   const [roleUpdated, setRoleUpdated] = useState(false);
   const [lastRole, setLastRole] = useState(currentPlayer?.role);
@@ -40,23 +39,16 @@ function GameScreen({
   }, [roomData?.currentSeekerId]);
 
   const handleAccusation = () => {
-    if (selectedPlayer && accusationReason.trim()) {
-      onAccusation(selectedPlayer, accusationReason);
+    if (selectedPlayer) {
+      onAccusation(selectedPlayer, null);
       setSelectedPlayer(null);
-      setAccusationReason('');
     }
   };
 
   const handleTimerExpire = () => {
     // Auto-submit accusation when timer expires
-    if (selectedPlayer && accusationReason.trim()) {
+    if (selectedPlayer) {
       handleAccusation();
-    } else {
-      // Force submit with whatever is available
-      setAccusationReason('(Auto-submitted - Time expired)');
-      if (selectedPlayer) {
-        handleAccusation();
-      }
     }
   };
 
@@ -64,7 +56,7 @@ function GameScreen({
   useEffect(() => {
     const handleKeyPress = (e) => {
       // Enter key submits accusation
-      if (e.key === 'Enter' && isSeeker && selectedPlayer && accusationReason.trim()) {
+      if (e.key === 'Enter' && isSeeker && selectedPlayer) {
         e.preventDefault();
         handleAccusation();
       }
@@ -72,13 +64,12 @@ function GameScreen({
       if (e.key === 'Escape' && isSeeker) {
         e.preventDefault();
         setSelectedPlayer(null);
-        setAccusationReason('');
       }
     };
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [isSeeker, selectedPlayer, accusationReason]);
+  }, [isSeeker, selectedPlayer]);
 
   // Get next role to find
   const ROLES = ['Girlfriend', 'Fling', 'Side Chick', 'Ex', "Ex's Ex", 'Lover'];
@@ -166,24 +157,12 @@ function GameScreen({
               </div>
             </div>
 
-            <div className="reason-input">
-              <label>Why do you think they're the {nextRole}?</label>
-              <textarea
-                placeholder="Enter your reasoning..."
-                value={accusationReason}
-                onChange={(e) => setAccusationReason(e.target.value)}
-                maxLength="200"
-                rows="3"
-              />
-              <span className="char-count">
-                {accusationReason.length}/200
-              </span>
-            </div>
+            {/* Reason input removed — reason is optional now */}
 
             <button
               className="primary"
               onClick={handleAccusation}
-              disabled={!selectedPlayer || !accusationReason.trim()}
+              disabled={!selectedPlayer}
               style={{ width: '100%', padding: '1rem' }}
             >
               Make Accusation

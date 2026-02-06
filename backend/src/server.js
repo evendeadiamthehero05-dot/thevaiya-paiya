@@ -71,7 +71,38 @@ async function emitRoomState(roomId) {
       connected: connectedSet.has(p.uid),
     }));
 
-    io.to(roomId).emit('ROOM_STATE_UPDATE', room);
+    // Emit a tailored ROOM_STATE_UPDATE to each connected socket in the room
+    for (const [socketId, info] of socketToRoom.entries()) {
+      if (info.roomId !== roomId) continue;
+
+      try {
+        const recipientPlayerId = info.playerId;
+
+        // For privacy: only include full role data for (a) the recipient themselves,
+        // (b) players whose role has been revealed, or (c) when the game has ended.
+        const tailoredPlayers = room.players.map((p) => {
+          const showRole = room.status === 'ended' || p.hasRevealed || p.uid === recipientPlayerId;
+          return {
+            uid: p.uid,
+            name: p.name,
+            role: showRole ? p.role : null,
+            points: p.points,
+            hasRevealed: p.hasRevealed,
+            isHost: p.isHost,
+            connected: p.connected,
+          };
+        });
+
+        const tailoredRoom = {
+          ...room,
+          players: tailoredPlayers,
+        };
+
+        io.to(socketId).emit('ROOM_STATE_UPDATE', tailoredRoom);
+      } catch (err) {
+        console.error('Error emitting tailored room state to socket', socketId, err);
+      }
+    }
   } catch (err) {
     console.error('Error emitting room state:', err);
   }

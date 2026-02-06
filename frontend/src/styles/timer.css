@@ -1,0 +1,70 @@
+/* Timer Component Styles */
+
+.timer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.timer-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.timer .time {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #00d4ff;
+}
+
+.timer .label {
+  font-size: 0.75rem;
+  color: #999;
+  font-weight: 600;
+}
+
+.timer.low .time {
+  color: #ff4757;
+  animation: pulse-red 1s infinite;
+}
+
+.timer-bar {
+  width: 100px;
+  height: 6px;
+  background: rgba(0, 212, 255, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid #00d4ff;
+}
+
+.timer-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+  transition: width 0.1s linear;
+}
+
+.timer-fill.low {
+  background: linear-gradient(90deg, #ff4757, #ff6b7a);
+  animation: glow-red 0.5s infinite;
+}
+
+@keyframes pulse-red {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes glow-red {
+  0%, 100% {
+    box-shadow: 0 0 5px #ff4757;
+  }
+  50% {
+    box-shadow: 0 0 10px #ff4757;
+  }
+}

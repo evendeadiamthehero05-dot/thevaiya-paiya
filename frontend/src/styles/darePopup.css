@@ -1,0 +1,70 @@
+/* Dare Popup Styles */
+
+.dare-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+  padding: 1rem;
+}
+
+.dare-popup {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff4757 100%);
+  border-radius: 1rem;
+  padding: 2rem;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(255, 71, 87, 0.4);
+  animation: slideUp 0.3s ease-out;
+}
+
+.dare-popup h2 {
+  text-align: center;
+  margin-top: 0;
+  color: #fff;
+  font-size: 1.75rem;
+}
+
+.dare-intro {
+  text-align: center;
+  color: #f0e6f6;
+  font-weight: 500;
+  margin: 0;
+}
+
+.dare-content {
+  background: rgba(0, 0, 0, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.dare-text {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.dare-note {
+  font-size: 0.9rem;
+  color: #f0e6f6;
+  text-align: center;
+  font-style: italic;
+  margin: 0;
+  opacity: 0.95;
+}
+
+.dare-popup button {
+  margin-top: 1rem;
+}

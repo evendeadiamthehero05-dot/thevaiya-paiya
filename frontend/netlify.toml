@@ -1,0 +1,17 @@
+[build]
+command = "npm run build"
+publish = "dist"
+
+[dev]
+command = "npm run dev"
+port = 5173
+
+# Redirect all URL requests to index.html (for React Router)
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
+
+# Environment variables for prod
+[context.production.environment]
+VITE_BACKEND_URL = "https://whos-the-real-backend.render.com"

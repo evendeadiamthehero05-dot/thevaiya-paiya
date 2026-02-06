@@ -1,0 +1,142 @@
+/* End Screen Styles */
+
+.end-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.end-screen h1 {
+  text-align: center;
+  background: linear-gradient(90deg, #ffd54f, #ff9800);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.25rem;
+}
+
+.winner-card {
+  background: linear-gradient(135deg, #ffd54f 0%, #ff9800 100%);
+  border-radius: 1rem;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(255, 152, 0, 0.3);
+}
+
+.winner-label {
+  color: #1a1a1a;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  opacity: 0.9;
+}
+
+.winner-name {
+  color: #1a1a1a;
+  font-size: 2rem;
+  margin: 0.5rem 0;
+}
+
+.winner-points {
+  color: #1a1a1a;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.final-standings {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.final-standings h3 {
+  margin-bottom: 0;
+}
+
+.standings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.standing-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  background: rgba(0, 212, 255, 0.1);
+  border-radius: 0.5rem;
+  border: 1px solid #00d4ff;
+}
+
+.rank {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: #00d4ff;
+  color: #1a1a1a;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.standing-item .player-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.standing-item .name {
+  color: #fff;
+  font-weight: 600;
+}
+
+.standing-item .role {
+  color: #b0e0ff;
+  font-size: 0.85rem;
+}
+
+.standing-item .points-badge {
+  background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.game-summary {
+  background: rgba(0, 212, 255, 0.1);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border-left: 3px solid #00d4ff;
+}
+
+.game-summary h3 {
+  margin-top: 0;
+}
+
+.game-summary ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.game-summary li {
+  padding: 0.5rem 0;
+  color: #d0e8ff;
+  display: flex;
+  justify-content: space-between;
+}
+
+.game-summary strong {
+  color: #00d4ff;
+  font-weight: 700;
+}

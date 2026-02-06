@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/lobbyScreen.css';
 
-function LobbyScreen({ roomId, roomData, playerId, currentPlayer, onStartGame }) {
+function LobbyScreen({ roomId, roomData, playerId, currentPlayer, onStartGame, onBackHome }) {
   const [isHost, setIsHost] = useState(false);
   const [playerCount, setPlayerCount] = useState(0);
 
@@ -63,6 +63,14 @@ function LobbyScreen({ roomId, roomData, playerId, currentPlayer, onStartGame })
         {!isHost && (
           <p className="waiting-text">Waiting for host to start the game...</p>
         )}
+
+        <button
+          className="exit-button"
+          onClick={onBackHome}
+          title="Leave the room and go back to home"
+        >
+          ✕ Exit
+        </button>
       </div>
     </div>
   );

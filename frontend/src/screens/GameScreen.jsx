@@ -9,6 +9,7 @@ function GameScreen({
   isSeeker,
   onAccusation,
   onGameEnd,
+  onBackHome,
 }) {
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [timerKey, setTimerKey] = useState(0);
@@ -235,6 +236,14 @@ function GameScreen({
               ))}
           </div>
         </div>
+
+        <button
+          className="exit-button"
+          onClick={onBackHome}
+          title="Exit the game and go back to home"
+        >
+          ✕ Exit
+        </button>
       </div>
     </div>
   );

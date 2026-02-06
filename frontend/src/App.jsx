@@ -5,6 +5,7 @@ import LobbyScreen from './screens/LobbyScreen';
 import RoleRevealScreen from './screens/RoleRevealScreen';
 import GameScreen from './screens/GameScreen';
 import DarePopup from './components/DarePopup';
+import LoadingScreen from './components/LoadingScreen';
 import EndScreen from './screens/EndScreen';
 import ReadyConfirmationScreen from './screens/ReadyConfirmationScreen';
 import FinalResultsScreen from './screens/FinalResultsScreen';
@@ -26,6 +27,8 @@ function App() {
   const [isConnected, setIsConnected] = useState(true);
   const [isReconnecting, setIsReconnecting] = useState(false);
   const [playerReady, setPlayerReady] = useState(false);
+  const [loadingVisible, setLoadingVisible] = useState(false);
+  const [loadingImage, setLoadingImage] = useState(null);
 
   // Socket connection
   const socketRef = useRef(null);
@@ -250,6 +253,16 @@ function App() {
     setDare(null);
   };
 
+  // Loading screen controls
+  const showLoading = (imageUrl = null) => {
+    setLoadingImage(imageUrl);
+    setLoadingVisible(true);
+  };
+
+  const hideLoading = () => {
+    setLoadingVisible(false);
+  };
+
   // Render appropriate screen
   const renderScreen = () => {
     if (error) {
@@ -276,6 +289,7 @@ function App() {
             playerId={playerId}
             currentPlayer={currentPlayer}
             onStartGame={handleStartGame}
+            onBackHome={handleBackHome}
           />
         );
       case 'ready':
@@ -303,6 +317,7 @@ function App() {
             isSeeker={roomData?.currentSeekerId === playerId}
             onAccusation={handleAccusation}
             onGameEnd={() => setScreen('endResults')}
+            onBackHome={handleBackHome}
           />
         );
       case 'endResults':
@@ -328,6 +343,7 @@ function App() {
   return (
     <div className="app">
       <ConnectionStatus isConnected={isConnected} isReconnecting={isReconnecting} />
+      <LoadingScreen isVisible={loadingVisible} imageUrl={loadingImage} />
       {renderScreen()}
       {dare && <DarePopup dare={dare} onComplete={handleDareCompleted} />}
     </div>

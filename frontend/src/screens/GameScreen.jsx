@@ -71,11 +71,13 @@ function GameScreen({
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [isSeeker, selectedPlayer]);
 
-  // Get next role to find
+  // Get next role to find (safe coercion)
   const ROLES = ['Girlfriend', 'Fling', 'Side Chick', 'Ex', "Ex's Ex", 'Lover'];
-  const nextRole = roomData?.currentRoleIndex < ROLES.length 
-    ? ROLES[roomData?.currentRoleIndex] 
-    : null;
+  let nextRole = null;
+  if (roomData?.currentRoleIndex !== undefined && roomData?.currentRoleIndex !== null) {
+    const idx = Number(roomData.currentRoleIndex);
+    if (Number.isFinite(idx) && idx >= 0 && idx < ROLES.length) nextRole = ROLES[idx];
+  }
 
   // Get revealed roles
   const revealedRoles = roomData?.players
@@ -97,13 +99,16 @@ function GameScreen({
       <div className="game-screen">
         <div className="game-header">
           <div className="game-status">
-            <h2>Find the {nextRole}</h2>
             {isSeeker ? (
-              <p className="seeker-badge">🔍 You are the Seeker!</p>
+              <>
+                <h2>Find the {nextRole}</h2>
+                <p className="seeker-badge">🔍 You are the Seeker!</p>
+              </>
             ) : (
-              <p className="player-info">
-                {currentSeeker?.name} is searching...
-              </p>
+              <>
+                <h2>Find the next role</h2>
+                <p className="player-info">{currentSeeker?.name} is searching...</p>
+              </>
             )}
             {currentPlayer && (
               <div className={`your-role-display ${roleUpdated ? 'updated' : ''}`}>

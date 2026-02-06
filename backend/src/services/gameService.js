@@ -282,6 +282,9 @@ async function processAccusation(db, roomId, seekerId, accusedPlayerId) {
           return;
         }
 
+        // Debug: room state
+        console.log(`processAccusation: roomId=${roomId}, status=${room.status}, current_role_index=${room.current_role_index}`);
+
         // Prevent consecutive accusations
         if (room.last_accused_player === accusedPlayerId) {
           reject(new Error('Cannot accuse the same player consecutively'));
@@ -298,7 +301,17 @@ async function processAccusation(db, roomId, seekerId, accusedPlayerId) {
               return;
             }
 
-            const expectedRole = String(ROLES[room.current_role_index] || '').trim();
+            // Ensure role index is a valid integer
+            let roleIndex = room.current_role_index;
+            if (roleIndex === null || roleIndex === undefined) {
+              roleIndex = 0;
+            } else {
+              roleIndex = Number(roleIndex);
+              if (!Number.isFinite(roleIndex) || roleIndex < 0 || roleIndex >= ROLES.length) {
+                roleIndex = 0;
+              }
+            }
+            const expectedRole = String(ROLES[roleIndex] || '').trim();
             const accusedRoleRaw = accusedPlayer.role || '';
             const accusedRole = String(accusedRoleRaw).trim();
             

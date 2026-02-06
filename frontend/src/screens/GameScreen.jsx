@@ -40,7 +40,7 @@ function GameScreen({
 
   const handleAccusation = () => {
     if (selectedPlayer) {
-      onAccusation(selectedPlayer, null);
+      onAccusation(selectedPlayer);
       setSelectedPlayer(null);
     }
   };

@@ -191,14 +191,13 @@ io.on('connection', (socket) => {
 
   // Make an accusation
   socket.on('MAKE_ACCUSATION', async (data) => {
-    const { roomId, playerId, accusedPlayerId, reason } = data;
+    const { roomId, playerId, accusedPlayerId } = data;
     try {
       const result = await gameService.processAccusation(
         db,
         roomId,
         playerId,
-        accusedPlayerId,
-        reason
+        accusedPlayerId
       );
 
       // Emit result to all players in room

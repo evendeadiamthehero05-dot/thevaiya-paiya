@@ -207,9 +207,10 @@ async function startGame(db, roomId) {
             // Update players with roles
             let updatedCount = 0;
             playerIds.forEach((uid, index) => {
+              const role = String(shuffledRoles[index]).trim(); // Normalize role
               db.run(
                 'UPDATE players SET role = ? WHERE room_id = ? AND uid = ?',
-                [shuffledRoles[index], roomId, uid],
+                [role, roomId, uid],
                 (err) => {
                   if (err) {
                     reject(new Error(`Failed to assign roles: ${err.message}`));
@@ -221,7 +222,7 @@ async function startGame(db, roomId) {
                   if (updatedCount === playerIds.length) {
                     // Log role assignments for debugging (safe in dev only)
                     try {
-                      const assignments = playerIds.map((uid, i) => `${uid}=${shuffledRoles[i]}`).join(', ');
+                      const assignments = playerIds.map((uid, i) => `${uid}=${String(shuffledRoles[i]).trim()}`).join(', ');
                       console.log(`Role assignments for room ${roomId}: ${assignments}`);
                     } catch (e) {
                       // ignore
@@ -269,7 +270,7 @@ async function startGame(db, roomId) {
 /**
  * Process an accusation
  */
-async function processAccusation(db, roomId, seekerId, accusedPlayerId, reason) {
+async function processAccusation(db, roomId, seekerId, accusedPlayerId) {
   return new Promise((resolve, reject) => {
     db.get(
       'SELECT * FROM rooms WHERE room_id = ?',
@@ -302,12 +303,19 @@ async function processAccusation(db, roomId, seekerId, accusedPlayerId, reason) 
               return;
             }
 
-            const expectedRole = ROLES[room.current_role_index];
+            const expectedRole = String(ROLES[room.current_role_index] || '').trim();
             const accusedRoleRaw = accusedPlayer.role || '';
             const accusedRole = String(accusedRoleRaw).trim();
+            
             // Log comparison for debugging
-            console.log(`Accusation check in room ${roomId}: expected='${expectedRole}', accused='${accusedRole}'`);
-            const isCorrect = accusedRole.toLowerCase() === String(expectedRole).toLowerCase();
+            console.log(`Accusation check in room ${roomId}: expected='${expectedRole}' (index=${room.current_role_index}), accused='${accusedRole}' (length=${accusedRole.length})`);
+            
+            // Normalize and compare (case-insensitive)
+            const normalizedExpected = expectedRole.toLowerCase().trim();
+            const normalizedAccused = accusedRole.toLowerCase().trim();
+            const isCorrect = normalizedAccused === normalizedExpected;
+            
+            console.log(`Comparison result: normalized_expected='${normalizedExpected}', normalized_accused='${normalizedAccused}', isCorrect=${isCorrect}`);
 
             if (isCorrect) {
               // CORRECT ACCUSATION

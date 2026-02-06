@@ -216,27 +216,6 @@
   font-weight: 600;
 }
 
-.reason-input {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.reason-input label {
-  font-weight: 600;
-  color: #d4e8ff;
-}
-
-.reason-input textarea {
-  padding: 0.75rem;
-}
-
-.char-count {
-  font-size: 0.85rem;
-  color: #999;
-  text-align: right;
-}
-
 .waiting-panel {
   display: flex;
   align-items: center;

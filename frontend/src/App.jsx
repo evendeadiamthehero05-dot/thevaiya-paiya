@@ -224,12 +224,11 @@ function App() {
   };
 
   // Handle accusation
-  const handleAccusation = (accusedPlayerId, reason) => {
+  const handleAccusation = (accusedPlayerId) => {
     socketRef.current.emit('MAKE_ACCUSATION', {
       roomId,
       playerId,
       accusedPlayerId,
-      reason,
     });
   };
 

@@ -202,7 +202,7 @@ THEN status = 'ended'
 ```
 WAITING
 ├─ Players joining via room code
-├─ Host can start when 6-8 players ready
+├─ Host can start when 6 players ready
 └─ No game logic yet
 
 PLAYING
@@ -259,7 +259,7 @@ Game Over: 30 points total distributed
 
 ## 📋 Full Checklist for Organizers
 
-- [ ] Minimum 6 players, maximum 8
+- [ ] Minimum 6 players, maximum 6 (exactly 6 players required)
 - [ ] Clear phone signals/WiFi
 - [ ] Everyone understands roles are secret
 - [ ] Dare completion is mandatory (on honor system)

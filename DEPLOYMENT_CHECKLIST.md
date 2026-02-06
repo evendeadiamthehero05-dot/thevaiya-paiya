@@ -58,7 +58,7 @@ Each friend:
 1. Opens the link
 2. First player: "Create Room" → Share code with others
 3. Others: "Join Room" → Enter code
-4. Once 6-8 players: "Start Game"
+4. Once 6 players: "Start Game"
 
 ---
 

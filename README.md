@@ -6,7 +6,7 @@ A mobile-first, real-time online social deduction game built with React, Node.js
 
 ## 🎮 Game Overview
 
-**Players:** 6-8 per room  
+**Players:** 6 per room  
 **Roles:** Girlfriend, Fling, Side Chick, Ex, Ex's Ex, Lover  
 **Mechanics:** Accusation → Role reveal or Role swap + Dare  
 **Duration:** ~15-25 minutes  
@@ -183,7 +183,7 @@ Open [http://localhost:3000](http://localhost:3000) on your mobile phone or brow
 ### 2. Lobby (Waiting Room)
 - Room code display
 - Player list with host badge
-- Start button (host only, requires 6-8 players)
+- Start button (host only, requires 6 players)
 
 ### 3. Role Reveal
 - Secret role card (animated)

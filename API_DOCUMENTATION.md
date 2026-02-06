@@ -38,7 +38,7 @@ Starts the game (host only). Assigns roles and selects first seeker.
 
 **Validation:**
 - Must be room host
-- 6-8 players required
+- 6 players required
 - Room status must be "waiting"
 
 **Server Response:**
@@ -244,7 +244,7 @@ Sent when invalid action attempted.
 **Errors:**
 - `404`: Room not found
 - `400`: Game already started
-- `400`: Room full (8 players max)
+-- `400`: Room full (6 players max)
 
 ---
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/loadingScreen.css';
 
-function LoadingScreen({ isVisible = true, imageUrl = "https://preview.redd.it/guys-need-that-pradeep-ranganathan-meme-v0-310o4kxy27zf1.jpeg?width=320&format=pjpg&auto=webp&s=2226f198d8cbb2f9338dec16577e1a66eaac37bf", text = "Game aada ready'a da punda" }) {
+function LoadingScreen({ isVisible = true, imageUrl = "https://preview.redd.it/guys-need-that-pradeep-ranganathan-meme-v0-310o4kxy27zf1.jpeg?width=320&format=pjpg&auto=webp&s=2226f198d8cbb2f9338dec16577e1a66eaac37bf", text = "Game aada ready'a da punda?" }) {
   if (!isVisible) return null;
 
   return (

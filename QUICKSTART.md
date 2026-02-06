@@ -111,7 +111,7 @@ Open **http://localhost:3000** on your phone or browser.
 
 1. **Create a Room**: Player 1 creates room, gets room code
 2. **Join Room**: Players 2-8 join with code
-3. **Start Game**: Host starts when 6-8 players ready
+3. **Start Game**: Host starts when 6 players ready
 4. **Your Role**: You'll see your secret role (DON'T TELL!)
 5. **Gameplay**:
    - Seeker accuses someone of being the current role

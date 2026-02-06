@@ -98,7 +98,7 @@
 .game-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 1rem;
   background: linear-gradient(135deg, rgba(255, 23, 68, 0.1) 0%, rgba(255, 107, 157, 0.05) 100%);
   padding: 1.5rem;
@@ -143,7 +143,7 @@
   padding: 1rem 1.25rem;
   margin-top: 0.75rem;
   text-align: center;
-  animation: heartBeat 1.5s infinite;
+  animation: heartBeat 1.2s ease 1;
   box-shadow: 0 4px 15px rgba(255, 23, 68, 0.2);
 }
 
@@ -558,6 +558,52 @@
 .points-item:hover {\n  background: linear-gradient(135deg, rgba(255, 23, 68, 0.15) 0%, rgba(255, 107, 157, 0.1) 100%);
   transform: translateX(4px);
   border-color: #ff1744;
+}
+
+/* Responsive tweaks for mobile to improve alignment and spacing */
+@media (max-width: 768px) {
+  .game-header {
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+
+  .roles-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .player-buttons {
+    grid-template-columns: 1fr;
+  }
+
+  .player-button {
+    min-height: 56px;
+    padding: 0.75rem 0.75rem;
+    border-radius: 0.9rem;
+  }
+
+  .revealed-roles,
+  .accusation-panel,
+  .player-roster,
+  .role-tracker,
+  .game-info {
+    padding: 0.9rem;
+    margin-top: 0.75rem;
+  }
+
+  .game-screen {
+    gap: 1rem;
+  }
+
+  .your-role-display {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .tracker-roles {
+    justify-content: center;
+  }
 }
 
 .player-info-name {

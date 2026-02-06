@@ -14,7 +14,7 @@ function LobbyScreen({ roomId, roomData, playerId, currentPlayer, onStartGame, o
     }
   }, [roomData, currentPlayer]);
 
-  const isReady = playerCount >= 6 && playerCount <= 8;
+  const isReady = playerCount === 6;
 
   return (
     <div className="container">
@@ -24,12 +24,12 @@ function LobbyScreen({ roomId, roomData, playerId, currentPlayer, onStartGame, o
         <div className="room-info">
           <p className="room-code">Room Code: <strong>{roomId}</strong></p>
           <p className="player-count">
-            Players: <strong>{playerCount}/8</strong>
+            Players: <strong>{playerCount}/6</strong>
           </p>
         </div>
 
         {playerCount < 6 && (
-          <p className="warning">⏳ Waiting for at least 6 players to start...</p>
+          <p className="warning">⏳ Waiting for 6 players to start...</p>
         )}
 
         <div className="players-list">

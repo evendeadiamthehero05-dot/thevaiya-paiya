@@ -29,6 +29,7 @@ function App() {
   const [playerReady, setPlayerReady] = useState(false);
   const [loadingVisible, setLoadingVisible] = useState(false);
   const [loadingImage, setLoadingImage] = useState(null);
+  const [loadingText, setLoadingText] = useState(null);
 
   // Socket connection
   const socketRef = useRef(null);
@@ -68,6 +69,12 @@ function App() {
 
     socketRef.current.on('ROOM_STATE_UPDATE', (data) => {
       setRoomData(data);
+      // Hide loading once server marks game as playing
+      if (data?.status === 'playing') {
+        setLoadingVisible(false);
+        setLoadingText(null);
+        setLoadingImage(null);
+      }
     });
 
     socketRef.current.on('ACCUSATION_RESULT', (result) => {
@@ -117,9 +124,9 @@ function App() {
     }
   }, [roomData?.status, screen]);
 
-  // Auto-transition to ready screen when game starts with 6-8 players
+  // Auto-transition to ready screen when exactly 6 players are present and all are ready
   useEffect(() => {
-    if (roomData?.status === 'waiting' && roomData?.players?.length >= 6) {
+    if (roomData?.status === 'waiting' && roomData?.players?.length === 6) {
       const allReady = roomData.players.every(p => p.isReady);
       if (allReady && screen === 'lobby') {
         setScreen('roleReveal');
@@ -221,8 +228,11 @@ function App() {
   };
   // Handle start game
   const handleStartGame = () => {
+    // Show loading with exact requested text while backend initializes roles
+    setLoadingText("Game aada ready'a da punda?");
+    setLoadingVisible(true);
     socketRef.current.emit('START_GAME', { roomId });
-    // Wait for backend to process and broadcast to all players before transitioning host
+    // Wait briefly; roleReveal will also be triggered when ROOM_STATE_UPDATE arrives
     setTimeout(() => setScreen('roleReveal'), 800);
   };
 
@@ -254,13 +264,16 @@ function App() {
   };
 
   // Loading screen controls
-  const showLoading = (imageUrl = null) => {
+  const showLoading = (imageUrl = null, text = null) => {
     setLoadingImage(imageUrl);
+    setLoadingText(text);
     setLoadingVisible(true);
   };
 
   const hideLoading = () => {
     setLoadingVisible(false);
+    setLoadingText(null);
+    setLoadingImage(null);
   };
 
   // Render appropriate screen
@@ -343,7 +356,7 @@ function App() {
   return (
     <div className="app">
       <ConnectionStatus isConnected={isConnected} isReconnecting={isReconnecting} />
-      <LoadingScreen isVisible={loadingVisible} imageUrl={loadingImage} />
+      <LoadingScreen isVisible={loadingVisible} imageUrl={loadingImage} text={loadingText} />
       {renderScreen()}
       {dare && <DarePopup dare={dare} onComplete={handleDareCompleted} />}
     </div>

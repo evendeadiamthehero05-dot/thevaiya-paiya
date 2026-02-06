@@ -65,6 +65,9 @@ async function getRoomData(db, roomId) {
           return;
         }
 
+        // Return room data regardless of status (waiting/playing/ended)
+        // Individual actions (like accusations) still validate room.status separately.
+
         db.all(
           'SELECT * FROM players WHERE room_id = ?',
           [roomId],
@@ -124,8 +127,8 @@ async function addPlayerToRoom(db, roomId, playerName) {
               reject(new Error('Failed to check player count'));
               return;
             }
-            if (result.count >= 8) {
-              reject(new Error('Room is full (max 8 players)'));
+            if (result.count >= 6) {
+              reject(new Error('Room is full (max 6 players)'));
               return;
             }
 
@@ -178,20 +181,14 @@ async function startGame(db, roomId) {
             }
 
             const playerCount = playersData.length;
-            if (playerCount < 6 || playerCount > 8) {
-              reject(new Error('Game requires 6-8 players'));
+            if (playerCount !== 6) {
+              reject(new Error('Game requires exactly 6 players'));
               return;
             }
 
-            // Shuffle roles
+            // Shuffle roles for exactly 6 players
             const playerIds = playersData.map((p) => p.uid);
-            // Build a roles list that matches the number of players (6-8).
-            // If there are more players than ROLES length, repeat and reshuffle to fill.
-            let shuffledRoles = [];
-            while (shuffledRoles.length < playerIds.length) {
-              shuffledRoles = shuffledRoles.concat(shuffleArray([...ROLES]));
-            }
-            shuffledRoles = shuffledRoles.slice(0, playerIds.length);
+            let shuffledRoles = shuffleArray([...ROLES]).slice(0, playerIds.length);
 
             // Find first Girlfriend index (must exist since ROLES contains it)
             const girlfriendIndex = shuffledRoles.indexOf('Girlfriend');
@@ -276,6 +273,12 @@ async function processAccusation(db, roomId, seekerId, accusedPlayerId) {
           return;
         }
 
+        // Ensure game is in playing state
+        if (room.status !== 'playing') {
+          reject(new Error('Game is not currently playing'));
+          return;
+        }
+
         // Validate seeker
         if (room.current_seeker_id !== seekerId) {
           reject(new Error('Only the current seeker can make accusations'));
@@ -300,6 +303,12 @@ async function processAccusation(db, roomId, seekerId, accusedPlayerId) {
               reject(new Error('Accused player not found'));
               return;
             }
+
+              // Prevent accusing an already revealed player
+              if (accusedPlayer.has_revealed === 1) {
+                reject(new Error('Cannot accuse a player whose role has already been revealed'));
+                return;
+              }
 
             // Ensure role index is a valid integer
             let roleIndex = room.current_role_index;

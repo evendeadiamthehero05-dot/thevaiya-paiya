@@ -161,7 +161,7 @@ thevaiya-paiya/
 - [x] Role point distribution verified (10+8+6+4+2+0 = 30 max)
 - [x] Dare system working (random selection, least-used first)
 - [x] Timer mechanics (30 seconds per turn)
-- [x] Player count: 6-8 players optimal
+- [x] Player count: 6 players required
 
 ---
 
@@ -205,7 +205,7 @@ thevaiya-paiya/
   - Should return game state JSON
 
 - [ ] Test game flow:
-  - Create room (6-8 players)
+  - Create room (6 players)
   - Verify Girlfriend auto-detected as first Seeker
   - Test correct accusation (should reveal role)
   - Test wrong accusation (should show dare + swap roles)
@@ -251,7 +251,7 @@ thevaiya-paiya/
    ├─ Create Room (host)
    └─ Join Room (players)
 
-2. Lobby Screen (6-8 players needed)
+2. Lobby Screen (6 players needed)
    ├─ Show player list
    └─ Start Game (host only)
 

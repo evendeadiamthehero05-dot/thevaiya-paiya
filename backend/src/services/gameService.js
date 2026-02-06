@@ -5,21 +5,11 @@ const ROLE_POINTS = {
   'Girlfriend': 10,
   'Fling': 8,
   'Side Chick': 6,
-  /**
-   * Process an accusation with comprehensive validation
-   */
-  async function processAccusation(db, roomId, seekerId, accusedPlayerId, reason) {
-    return new Promise((resolve, reject) => {
-      // Input validation
-      if (!roomId || !seekerId || !accusedPlayerId || !reason) {
-        reject(new Error('Missing required fields'));
-        return;
-      }
+  'Ex': 4,
+  "Ex's Ex": 2,
+  'Lover': 0,
+};
 
-      if (seekerId === accusedPlayerId) {
-        reject(new Error('Cannot accuse yourself'));
-        return;
-      }
 const TIMER_DURATION = 30; // 30 seconds per turn
 
 /**
@@ -304,7 +294,11 @@ async function processAccusation(db, roomId, seekerId, accusedPlayerId, reason) 
             }
 
             const expectedRole = ROLES[room.current_role_index];
-            const isCorrect = accusedPlayer.role === expectedRole;
+            const accusedRoleRaw = accusedPlayer.role || '';
+            const accusedRole = String(accusedRoleRaw).trim();
+            // Log comparison for debugging
+            console.log(`Accusation check in room ${roomId}: expected='${expectedRole}', accused='${accusedRole}'`);
+            const isCorrect = accusedRole.toLowerCase() === String(expectedRole).toLowerCase();
 
             if (isCorrect) {
               // CORRECT ACCUSATION

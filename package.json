@@ -1,7 +1,7 @@
 {
-  "name": "whos-the-real-one",
+  "name": "thevaiya-paiya",
   "version": "1.0.0",
-  "description": "Mobile-first social deduction game",
+  "description": "Thevaiya paiya - Mobile-first social deduction game",
   "workspaces": ["backend", "frontend"],
   "scripts": {
     "install-all": "npm install && npm install -w backend && npm install -w frontend",

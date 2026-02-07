@@ -1,7 +1,7 @@
 {
   "name": "thevaiya-paiya-frontend",
   "version": "1.0.0",
-  "description": "Frontend for Thevaiya paiya? social deduction game",
+  "description": "Frontend for Thevaiya paiya - Social deduction game",
   "type": "module",
   "scripts": {
     "dev": "vite",

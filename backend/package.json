@@ -1,7 +1,7 @@
 {
   "name": "thevaiya-paiya-backend",
   "version": "1.0.0",
-  "description": "Backend for Thevaiya paiya? social deduction game",
+  "description": "Backend for Thevaiya paiya - Social deduction game",
   "main": "src/server.js",
   "engines": {
     "node": "24.x"

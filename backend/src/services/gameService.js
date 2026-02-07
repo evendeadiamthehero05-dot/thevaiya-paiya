@@ -1,8 +1,8 @@
 const { v4: uuidv4 } = require('uuid');
 
-const ROLES = ['Girlfriend', 'Fling', 'Side Chick', 'Ex', "Ex's Ex", 'Lover'];
+const ROLES = ['GF', 'Fling', 'Side Chick', 'Ex', "Ex's Ex", 'Lover'];
 const ROLE_POINTS = {
-  'Girlfriend': 10,
+  'GF': 10,
   'Fling': 8,
   'Side Chick': 6,
   'Ex': 4,
@@ -190,10 +190,10 @@ async function startGame(db, roomId) {
             const playerIds = playersData.map((p) => p.uid);
             let shuffledRoles = shuffleArray([...ROLES]).slice(0, playerIds.length);
 
-            // Find first Girlfriend index (must exist since ROLES contains it)
-            const girlfriendIndex = shuffledRoles.indexOf('Girlfriend');
-            // Safety: if Girlfriend is not found for any reason, default to first player
-            const gfIndexSafe = girlfriendIndex >= 0 ? girlfriendIndex : 0;
+            // Find first GF index (must exist since ROLES contains it)
+            const gfIndex = shuffledRoles.indexOf('GF');
+            // Safety: if GF is not found for any reason, default to first player
+            const gfIndexSafe = gfIndex >= 0 ? gfIndex : 0;
             const girlfriendId = playerIds[gfIndexSafe];
 
             // Update players with roles
@@ -243,7 +243,7 @@ async function startGame(db, roomId) {
                         }
 
                         console.log(
-                          `Game started in room ${roomId}, Girlfriend is ${girlfriendId}, starting with role_index=1 (Fling)`
+                          `Game started in room ${roomId}, GF is ${girlfriendId}, starting with role_index=1 (Fling)`
                         );
                         resolve();
                       }
@@ -642,7 +642,7 @@ async function resetGame(db, roomId) {
 
             const playerIds = players.map((p) => p.uid);
             const shuffledRoles = shuffleArray(ROLES);
-            const girlfriendId = playerIds[0]; // First player is always Girlfriend
+            const girlfriendId = playerIds[0]; // First player is always GF
 
             // Reset all players: reset points, has_revealed, and assign new roles
             let updatedCount = 0;
@@ -685,7 +685,7 @@ async function resetGame(db, roomId) {
                         }
 
                         console.log(
-                          `Game reset in room ${roomId}, starting new round with Girlfriend ${girlfriendId}`
+                          `Game reset in room ${roomId}, starting new round with GF ${girlfriendId}`
                         );
                         resolve();
                       }

@@ -162,7 +162,7 @@ app.get('/api/debug/rooms/:roomId', async (req, res) => {
     const room = await gameService.getRoomData(db, roomId);
     
     // Add debug info
-    const ROLES = ['Girlfriend', 'Fling', 'Side Chick', 'Ex', "Ex's Ex", 'Lover'];
+    const ROLES = ['GF', 'Fling', 'Side Chick', 'Ex', "Ex's Ex", 'Lover'];
     const currentRoleIndex = room.currentRoleIndex;
     const targetRole = currentRoleIndex < ROLES.length ? ROLES[currentRoleIndex] : 'GAME_ENDED';
     

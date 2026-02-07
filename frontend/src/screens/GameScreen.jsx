@@ -73,7 +73,7 @@ function GameScreen({
   }, [isSeeker, selectedPlayer]);
 
   // Get next role to find (safe coercion)
-  const ROLES = ['Girlfriend', 'Fling', 'Side Chick', 'Ex', "Ex's Ex", 'Lover'];
+  const ROLES = ['GF', 'Fling', 'Side Chick', 'Ex', "Ex's Ex", 'Lover'];
   let nextRole = null;
   if (roomData?.currentRoleIndex !== undefined && roomData?.currentRoleIndex !== null) {
     const idx = Number(roomData.currentRoleIndex);

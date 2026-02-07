@@ -4,7 +4,7 @@
   "description": "Backend for Thevaiya paiya? social deduction game",
   "main": "src/server.js",
   "engines": {
-    "node": "^18.0.0"
+    "node": "24.x"
   },
   "scripts": {
     "start": "node src/server.js",

@@ -2,12 +2,12 @@ const { v4: uuidv4 } = require('uuid');
 
 const ROLES = ['GF', 'Fling', 'Side Chick', 'Ex', "Ex's Ex", 'Lover'];
 const ROLE_POINTS = {
-  'GF': 10,
-  'Fling': 8,
-  'Side Chick': 6,
-  'Ex': 4,
-  "Ex's Ex": 2,
-  'Lover': 0,
+  'GF': 0,
+  'Fling': 10,
+  'Side Chick': 8,
+  'Ex': 6,
+  "Ex's Ex": 4,
+  'Lover': 2,
 };
 
 const TIMER_DURATION = 30; // 30 seconds per turn

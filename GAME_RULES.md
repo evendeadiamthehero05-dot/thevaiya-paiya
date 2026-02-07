@@ -6,12 +6,12 @@ All 6 roles are assigned to players at game start. The Seeker must identify them
 
 | Rank | Role | Points | Notes |
 |------|------|--------|-------|
-| 1 | Girlfriend | 10 pts | Auto-detected, becomes first Seeker |
-| 2 | Fling | 8 pts | Casual relationship |
-| 3 | Side Chick | 6 pts | Hidden connection |
-| 4 | Ex | 4 pts | Past relationship |
-| 5 | Ex's Ex | 2 pts | Complicated history |
-| 6 | Lover | 0 pts | Final role, no points |
+| 1 | Fling | 10 pts | First role to identify |
+| 2 | Side Chick | 8 pts | Hidden connection |
+| 3 | Ex | 6 pts | Past relationship |
+| 4 | Ex's Ex | 4 pts | Complicated history |
+| 5 | Lover | 2 pts | Final role, minimal points |
+| 6 | GF | 0 pts | No points (starting seeker) |
 
 ---
 

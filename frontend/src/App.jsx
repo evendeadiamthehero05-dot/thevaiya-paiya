@@ -236,6 +236,16 @@ function App() {
     setTimeout(() => setScreen('roleReveal'), 800);
   };
 
+  // Handle play again
+  const handlePlayAgain = () => {
+    // Show loading while backend resets the game
+    setLoadingText("Game aada ready'a da punda?");
+    setLoadingVisible(true);
+    socketRef.current.emit('PLAY_AGAIN', { roomId });
+    // Wait briefly; roleReveal will be triggered when ROOM_STATE_UPDATE arrives
+    setTimeout(() => setScreen('roleReveal'), 800);
+  };
+
   // Handle accusation
   const handleAccusation = (accusedPlayerId) => {
     socketRef.current.emit('MAKE_ACCUSATION', {
@@ -339,6 +349,7 @@ function App() {
             roomData={roomData}
             playerId={playerId}
             onBackHome={handleBackHome}
+            onPlayAgain={handlePlayAgain}
           />
         );
       case 'end':
@@ -346,6 +357,7 @@ function App() {
           <EndScreen
             roomData={roomData}
             onBackHome={handleBackHome}
+            onPlayAgain={handlePlayAgain}
           />
         );
       default:

@@ -231,6 +231,18 @@ io.on('connection', (socket) => {
     }
   });
 
+  // Play again (reset game and start new round)
+  socket.on('PLAY_AGAIN', async (data) => {
+    const { roomId } = data;
+    try {
+      await gameService.resetGame(db, roomId);
+      await emitRoomState(roomId);
+    } catch (error) {
+      console.error('Error resetting game:', error);
+      socket.emit('ERROR', { message: error.message });
+    }
+  });
+
   // Make an accusation
   socket.on('MAKE_ACCUSATION', async (data) => {
     const { roomId, playerId, accusedPlayerId } = data;

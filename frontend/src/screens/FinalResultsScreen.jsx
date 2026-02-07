@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/finalResultsScreen.css';
 
-function FinalResultsScreen({ roomData, playerId, onBackHome }) {
+function FinalResultsScreen({ roomData, playerId, onBackHome, onPlayAgain }) {
   const [confetti, setConfetti] = useState(true);
   
   // Find winner (highest points)
@@ -130,6 +130,13 @@ function FinalResultsScreen({ roomData, playerId, onBackHome }) {
         <div className="results-actions">
           <button 
             className="primary" 
+            onClick={onPlayAgain}
+            style={{ width: '100%', padding: '1rem', marginBottom: '0.5rem' }}
+          >
+            🔄 Play Again
+          </button>
+          <button 
+            className="secondary" 
             onClick={onBackHome}
             style={{ width: '100%', padding: '1rem' }}
           >

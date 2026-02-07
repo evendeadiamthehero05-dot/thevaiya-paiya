@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import '../styles/endScreen.css';
 
-function EndScreen({ roomData, onBackHome }) {
+function EndScreen({ roomData, onBackHome, onPlayAgain }) {
   const sortedPlayers = useMemo(() => {
     const players = roomData?.players || [];
     return [...players].sort((a, b) => b.points - a.points);
@@ -47,13 +47,22 @@ function EndScreen({ roomData, onBackHome }) {
           </ul>
         </div>
 
-        <button
-          className="primary"
-          onClick={onBackHome}
-          style={{ width: '100%', padding: '1rem' }}
-        >
-          Back to Home
-        </button>
+        <div className="button-group">
+          <button
+            className="primary"
+            onClick={onPlayAgain}
+            style={{ width: '100%', padding: '1rem', marginBottom: '0.5rem' }}
+          >
+            🔄 Play Again
+          </button>
+          <button
+            className="secondary"
+            onClick={onBackHome}
+            style={{ width: '100%', padding: '1rem' }}
+          >
+            🏠 Back to Home
+          </button>
+        </div>
       </div>
     </div>
   );

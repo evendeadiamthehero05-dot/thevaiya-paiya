@@ -616,11 +616,97 @@ function shuffleArray(array) {
   return shuffled;
 }
 
+/**
+ * Reset the game to play again with new roles
+ */
+async function resetGame(db, roomId) {
+  return new Promise((resolve, reject) => {
+    db.get(
+      'SELECT * FROM rooms WHERE room_id = ?',
+      [roomId],
+      (err, room) => {
+        if (err || !room) {
+          reject(new Error('Room not found'));
+          return;
+        }
+
+        // Get all players
+        db.all(
+          'SELECT uid FROM players WHERE room_id = ? ORDER BY uid',
+          [roomId],
+          (err, players) => {
+            if (err || !players || players.length < 2) {
+              reject(new Error('Invalid player count'));
+              return;
+            }
+
+            const playerIds = players.map((p) => p.uid);
+            const shuffledRoles = shuffleArray(ROLES);
+            const girlfriendId = playerIds[0]; // First player is always Girlfriend
+
+            // Reset all players: reset points, has_revealed, and assign new roles
+            let updatedCount = 0;
+            playerIds.forEach((uid, index) => {
+              const role = String(shuffledRoles[index]).trim();
+              db.run(
+                'UPDATE players SET role = ?, points = 0, has_revealed = 0 WHERE room_id = ? AND uid = ?',
+                [role, roomId, uid],
+                (err) => {
+                  if (err) {
+                    reject(new Error(`Failed to reset players: ${err.message}`));
+                    return;
+                  }
+
+                  updatedCount++;
+
+                  if (updatedCount === playerIds.length) {
+                    // All players reset, now update room
+                    const timerEndsAt = new Date(
+                      Date.now() + TIMER_DURATION * 1000
+                    ).toISOString();
+
+                    db.run(
+                      `UPDATE rooms SET 
+                        status = ?, 
+                        current_seeker_id = ?, 
+                        current_role_index = ?, 
+                        timer_ends_at = ?,
+                        last_accused_player = NULL
+                      WHERE room_id = ?`,
+                      ['playing', girlfriendId, 1, timerEndsAt, roomId],
+                      (err) => {
+                        if (err) {
+                          reject(
+                            new Error(
+                              `Failed to reset game: ${err.message}`
+                            )
+                          );
+                          return;
+                        }
+
+                        console.log(
+                          `Game reset in room ${roomId}, starting new round with Girlfriend ${girlfriendId}`
+                        );
+                        resolve();
+                      }
+                    );
+                  }
+                }
+              );
+            });
+          }
+        );
+      }
+    );
+  });
+}
+
 module.exports = {
   createRoom,
   getRoomData,
   addPlayerToRoom,
   startGame,
   processAccusation,
-  getRandomDare
+  getRandomDare,
+  resetGame
 };

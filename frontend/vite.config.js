@@ -6,6 +6,13 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
+    host: '0.0.0.0',
+    allowedHosts: [
+      'localhost',
+      '127.0.0.1',
+      'thevaiyapaiya.onrender.com',
+      '*.onrender.com',
+    ],
     proxy: {
       '/api': {
         target: 'http://localhost:3001',
@@ -16,12 +23,7 @@ export default defineConfig({
   preview: {
     port: 5173,
     host: '0.0.0.0',
-    allowedHosts: [
-      'localhost',
-      '127.0.0.1',
-      'thevaiyapaiya.onrender.com',
-      '*.onrender.com',
-    ],
+    strictPort: false,
   },
   build: {
     outDir: 'dist',

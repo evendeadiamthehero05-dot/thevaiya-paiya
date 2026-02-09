@@ -1,5 +1,19 @@
 services:
   - type: web
+    name: thevaiya-paiya-frontend
+    runtime: node
+    plan: free
+    buildCommand: npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: VITE_BACKEND_URL
+        value: https://thevaiya-paiya-backend.onrender.com
+        sync: false
+    dir: ./frontend
+
+  - type: web
     name: thevaiya-paiya-backend
     runtime: docker
     plan: free
@@ -9,5 +23,9 @@ services:
         value: production
       - key: PORT
         value: "3001"
-      - key: VITE_BACKEND_URL
+      - key: FRONTEND_URL
+        value: https://thevaiya-paiya-frontend.onrender.com
+        sync: false
+      - key: CORS_ORIGIN
+        value: https://thevaiya-paiya-frontend.onrender.com
         sync: false

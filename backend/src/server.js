@@ -7,6 +7,7 @@ const gameService = require('./services/gameService');
 
 const app = express();
 const server = http.createServer(app);
+
 // CORS configuration for multiple environments
 const corsOrigins = [
   'http://localhost:3000',
@@ -20,7 +21,12 @@ if (process.env.FRONTEND_URL) {
   corsOrigins.push(process.env.FRONTEND_URL);
 }
 
-// Allow any deployed frontend in production (Netlify)
+// Add CORS_ORIGIN if provided
+if (process.env.CORS_ORIGIN) {
+  corsOrigins.push(process.env.CORS_ORIGIN);
+}
+
+// Allow any deployed frontend in production (Netlify, GitHub Pages, etc)
 const corsOptions = {
   origin: (origin, callback) => {
     // Allow requests with no origin (mobile apps, curl requests, etc)
@@ -31,8 +37,13 @@ const corsOptions = {
       return callback(null, true);
     }
     
+    // Allow GitHub Pages deployments
+    if (origin.includes('github.io') || process.env.NODE_ENV === 'production') {
+      return callback(null, true);
+    }
+    
     // Allow Netlify deployments
-    if (origin.includes('netlify.app') || process.env.NODE_ENV === 'production') {
+    if (origin.includes('netlify.app')) {
       return callback(null, true);
     }
     
@@ -40,7 +51,8 @@ const corsOptions = {
     if (corsOrigins.includes(origin)) {
       return callback(null, true);
     }
-    
+
+    console.log(`CORS blocked origin: ${origin}`);
     callback(new Error('Not allowed by CORS'));
   },
   methods: ['GET', 'POST', 'OPTIONS'],

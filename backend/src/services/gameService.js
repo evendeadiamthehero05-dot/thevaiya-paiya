@@ -2,12 +2,12 @@ const { v4: uuidv4 } = require('uuid');
 
 const ROLES = ['GF', 'Fling', 'Side Chick', 'Ex', "Ex's Ex", 'Lover'];
 const ROLE_POINTS = {
-  'GF': 0,
-  'Fling': 10,
-  'Side Chick': 8,
-  'Ex': 6,
-  "Ex's Ex": 4,
-  'Lover': 2,
+  'GF': 10,
+  'Fling': 8,
+  'Side Chick': 6,
+  'Ex': 4,
+  "Ex's Ex": 2,
+  'Lover': 0,
 };
 
 const TIMER_DURATION = 30; // 30 seconds per turn
@@ -190,11 +190,9 @@ async function startGame(db, roomId) {
             const playerIds = playersData.map((p) => p.uid);
             let shuffledRoles = shuffleArray([...ROLES]).slice(0, playerIds.length);
 
-            // Find first GF index (must exist since ROLES contains it)
-            const gfIndex = shuffledRoles.indexOf('GF');
-            // Safety: if GF is not found for any reason, default to first player
-            const gfIndexSafe = gfIndex >= 0 ? gfIndex : 0;
-            const girlfriendId = playerIds[gfIndexSafe];
+            // Pick a random first seeker (any player)
+            const randomSeekerIdx = Math.floor(Math.random() * playerIds.length);
+            const firstSeekerId = playerIds[randomSeekerIdx];
 
             // Update players with roles
             let updatedCount = 0;
@@ -231,7 +229,7 @@ async function startGame(db, roomId) {
                         current_role_index = ?, 
                         timer_ends_at = ? 
                       WHERE room_id = ?`,
-                      ['playing', girlfriendId, 1, timerEndsAt, roomId],
+                      ['playing', firstSeekerId, 0, timerEndsAt, roomId],
                       (err) => {
                         if (err) {
                           reject(
@@ -243,7 +241,7 @@ async function startGame(db, roomId) {
                         }
 
                         console.log(
-                          `Game started in room ${roomId}, GF is ${girlfriendId}, starting with role_index=1 (Fling)`
+                          `Game started in room ${roomId}, first seeker is ${firstSeekerId}, starting with role_index=0 (GF)`
                         );
                         resolve();
                       }
@@ -395,9 +393,9 @@ function processCorrectAccusation(
         return;
       }
 
-      // Get seeker points
+      // Get seeker points and role
       db.get(
-        'SELECT points FROM players WHERE room_id = ? AND uid = ?',
+        'SELECT points, role FROM players WHERE room_id = ? AND uid = ?',
         [roomId, seekerId],
         (err, seeker) => {
           if (err) {
@@ -405,7 +403,8 @@ function processCorrectAccusation(
             return;
           }
 
-          const pointsEarned = ROLE_POINTS[expectedRole];
+          // Award points based on SEEKER'S role, not the expected role
+          const pointsEarned = ROLE_POINTS[seeker.role];
           const newPoints = (seeker.points || 0) + pointsEarned;
 
           // Award points to seeker
@@ -642,7 +641,10 @@ async function resetGame(db, roomId) {
 
             const playerIds = players.map((p) => p.uid);
             const shuffledRoles = shuffleArray(ROLES);
-            const girlfriendId = playerIds[0]; // First player is always GF
+            
+            // Pick a random first seeker (any player)
+            const randomSeekerIdx = Math.floor(Math.random() * playerIds.length);
+            const firstSeekerId = playerIds[randomSeekerIdx];
 
             // Reset all players: reset points, has_revealed, and assign new roles
             let updatedCount = 0;
@@ -673,7 +675,7 @@ async function resetGame(db, roomId) {
                         timer_ends_at = ?,
                         last_accused_player = NULL
                       WHERE room_id = ?`,
-                      ['playing', girlfriendId, 1, timerEndsAt, roomId],
+                      ['playing', firstSeekerId, 0, timerEndsAt, roomId],
                       (err) => {
                         if (err) {
                           reject(
@@ -685,7 +687,7 @@ async function resetGame(db, roomId) {
                         }
 
                         console.log(
-                          `Game reset in room ${roomId}, starting new round with GF ${girlfriendId}`
+                          `Game reset in room ${roomId}, first seeker is ${firstSeekerId}, starting with role_index=0 (GF)`
                         );
                         resolve();
                       }

@@ -488,10 +488,6 @@ function processCorrectAccusation(
       }
     }
   );
-        }
-      );
-    }
-  );
 }
 
 /**

@@ -190,9 +190,10 @@ async function startGame(db, roomId) {
             const playerIds = playersData.map((p) => p.uid);
             let shuffledRoles = shuffleArray([...ROLES]).slice(0, playerIds.length);
 
-            // Pick a random first seeker (any player)
-            const randomSeekerIdx = Math.floor(Math.random() * playerIds.length);
-            const firstSeekerId = playerIds[randomSeekerIdx];
+            // Find who has GF role - they become the first seeker
+            const gfIndex = shuffledRoles.indexOf('GF');
+            const gfIndexSafe = gfIndex >= 0 ? gfIndex : 0;
+            const girlfriendId = playerIds[gfIndexSafe];
 
             // Update players with roles
             let updatedCount = 0;
@@ -229,7 +230,7 @@ async function startGame(db, roomId) {
                         current_role_index = ?, 
                         timer_ends_at = ? 
                       WHERE room_id = ?`,
-                      ['playing', firstSeekerId, 0, timerEndsAt, roomId],
+                      ['playing', girlfriendId, 1, timerEndsAt, roomId],
                       (err) => {
                         if (err) {
                           reject(
@@ -241,7 +242,7 @@ async function startGame(db, roomId) {
                         }
 
                         console.log(
-                          `Game started in room ${roomId}, first seeker is ${firstSeekerId}, starting with role_index=0 (GF)`
+                          `Game started in room ${roomId}, GF is ${girlfriendId}, starting with role_index=1 (Fling)`
                         );
                         resolve();
                       }
@@ -642,9 +643,10 @@ async function resetGame(db, roomId) {
             const playerIds = players.map((p) => p.uid);
             const shuffledRoles = shuffleArray(ROLES);
             
-            // Pick a random first seeker (any player)
-            const randomSeekerIdx = Math.floor(Math.random() * playerIds.length);
-            const firstSeekerId = playerIds[randomSeekerIdx];
+            // Find who has GF role - they become the first seeker for new round
+            const gfIndex = shuffledRoles.indexOf('GF');
+            const gfIndexSafe = gfIndex >= 0 ? gfIndex : 0;
+            const girlfriendId = playerIds[gfIndexSafe];
 
             // Reset all players: reset points, has_revealed, and assign new roles
             let updatedCount = 0;
@@ -675,7 +677,7 @@ async function resetGame(db, roomId) {
                         timer_ends_at = ?,
                         last_accused_player = NULL
                       WHERE room_id = ?`,
-                      ['playing', firstSeekerId, 0, timerEndsAt, roomId],
+                      ['playing', girlfriendId, 1, timerEndsAt, roomId],
                       (err) => {
                         if (err) {
                           reject(
@@ -687,7 +689,7 @@ async function resetGame(db, roomId) {
                         }
 
                         console.log(
-                          `Game reset in room ${roomId}, first seeker is ${firstSeekerId}, starting with role_index=0 (GF)`
+                          `Game reset in room ${roomId}, GF is ${girlfriendId}, starting with role_index=1 (Fling)`
                         );
                         resolve();
                       }

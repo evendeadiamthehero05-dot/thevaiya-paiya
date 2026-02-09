@@ -394,89 +394,100 @@ function processCorrectAccusation(
         return;
       }
 
-      // Get seeker points and role
-      db.get(
-        'SELECT points, role FROM players WHERE room_id = ? AND uid = ?',
-        [roomId, seekerId],
-        (err, seeker) => {
-          if (err) {
-            reject(new Error('Failed to fetch seeker data'));
-            return;
-          }
+      const nextRoleIndex = currentRoleIndex + 1;
 
-          // Award points based on SEEKER'S role, not the expected role
-          const pointsEarned = ROLE_POINTS[seeker.role];
-          const newPoints = (seeker.points || 0) + pointsEarned;
-
-          // Award points to seeker
-          db.run(
-            'UPDATE players SET points = ? WHERE room_id = ? AND uid = ?',
-            [newPoints, roomId, seekerId],
-            (err) => {
-              if (err) {
-                reject(new Error('Failed to award points'));
-                return;
-              }
-
-              const nextRoleIndex = currentRoleIndex + 1;
-
-              if (nextRoleIndex >= ROLES.length) {
-                // Game ended
-                console.log(`\n✅ GAME ENDED - All roles found!`);
-                console.log(`Final winner: ${accusedPlayerId}`);
-                db.run(
-                  'UPDATE rooms SET status = ? WHERE room_id = ?',
-                  ['ended', roomId],
-                  (err) => {
-                    if (err) {
-                      reject(new Error('Failed to end game'));
-                      return;
-                    }
-
-                    resolve({
-                      isCorrect: true,
-                      newSeekerId: accusedPlayerId,
-                      nextRole: null,
-                      pointsEarned,
-                      gameEnded: true,
-                    });
-                  }
-                );
-              } else {
-                console.log(`\n⭐ CORRECT! Role '${expectedRole}' found by seeker`);
-                console.log(`Next role to find: '${ROLES[nextRoleIndex]}' (index ${nextRoleIndex})`);
-                console.log(`New Seeker: ${accusedPlayerId}\n`);
-                
-                const timerEndsAt = new Date(
-                  Date.now() + TIMER_DURATION * 1000
-                ).toISOString();
-
-                // Transfer seeker role
-                db.run(
-                  `UPDATE rooms SET 
-                    current_seeker_id = ?, 
-                    current_role_index = ?, 
-                    last_accused_player = NULL, 
-                    timer_ends_at = ? 
-                  WHERE room_id = ?`,
-                  [accusedPlayerId, nextRoleIndex, timerEndsAt, roomId],
-                  (err) => {
-                    if (err) {
-                      reject(new Error('Failed to transfer seeker'));
-                      return;
-                    }
-
-                    resolve({
-                      isCorrect: true,
-                      newSeekerId: accusedPlayerId,
-                      nextRole: ROLES[nextRoleIndex],
-                      pointsEarned,
-                    });
-                  }
-                );
-              }
+      if (nextRoleIndex >= ROLES.length) {
+        // Game ended - calculate final points based on roles
+        console.log(`\n✅ GAME ENDED - All roles found!`);
+        
+        // Award points to each player based on their FINAL role
+        db.all(
+          'SELECT uid, role FROM players WHERE room_id = ?',
+          [roomId],
+          (err, players) => {
+            if (err) {
+              reject(new Error('Failed to fetch players for final points'));
+              return;
             }
-          );
+
+            // Calculate points for each player
+            let updateCount = 0;
+            players.forEach((player) => {
+              const rolePoints = ROLE_POINTS[player.role] || 0;
+              db.run(
+                'UPDATE players SET points = ? WHERE room_id = ? AND uid = ?',
+                [rolePoints, roomId, player.uid],
+                (err) => {
+                  if (err) {
+                    reject(new Error('Failed to award final points'));
+                    return;
+                  }
+                  
+                  updateCount++;
+                  console.log(`Awarded ${rolePoints} points to player with role '${player.role}'`);
+                  
+                  if (updateCount === players.length) {
+                    console.log(`Final points awarded to all ${players.length} players\n`);
+                    
+                    db.run(
+                      'UPDATE rooms SET status = ? WHERE room_id = ?',
+                      ['ended', roomId],
+                      (err) => {
+                        if (err) {
+                          reject(new Error('Failed to end game'));
+                          return;
+                        }
+
+                        resolve({
+                          isCorrect: true,
+                          newSeekerId: accusedPlayerId,
+                          nextRole: null,
+                          pointsEarned: 0,
+                          gameEnded: true,
+                        });
+                      }
+                    );
+                  }
+                }
+              );
+            });
+          }
+        );
+      } else {
+        console.log(`\n⭐ CORRECT! Role '${expectedRole}' found by seeker`);
+        console.log(`Next role to find: '${ROLES[nextRoleIndex]}' (index ${nextRoleIndex})`);
+        console.log(`New Seeker: ${accusedPlayerId}\n`);
+        
+        const timerEndsAt = new Date(
+          Date.now() + TIMER_DURATION * 1000
+        ).toISOString();
+
+        // Transfer seeker role
+        db.run(
+          `UPDATE rooms SET 
+            current_seeker_id = ?, 
+            current_role_index = ?, 
+            last_accused_player = NULL, 
+            timer_ends_at = ? 
+          WHERE room_id = ?`,
+          [accusedPlayerId, nextRoleIndex, timerEndsAt, roomId],
+          (err) => {
+            if (err) {
+              reject(new Error('Failed to transfer seeker'));
+              return;
+            }
+
+            resolve({
+              isCorrect: true,
+              newSeekerId: accusedPlayerId,
+              nextRole: ROLES[nextRoleIndex],
+              pointsEarned: 0,
+            });
+          }
+        );
+      }
+    }
+  );
         }
       );
     }
